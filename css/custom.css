@@ -1,0 +1,394 @@
+/* How We Work start */
+.step-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    height: 250px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for color and background */
+.step-box:hover {
+    background-color: rgba(0, 0, 0, 0.782);
+    color: white;
+}
+
+.step-box:hover .step-icon {
+    color: white;
+}
+
+.step-box:hover .step-text {
+    color: white;
+}
+
+/* Ensure equal box height on smaller screens */
+@media (max-width: 576px) {
+    .step-box {
+        height: auto;
+    }
+}
+
+/* Icon Styling */
+.step-icon {
+    color: rgba(128, 128, 128, 0.835);
+    transition: color 0.3s ease;
+}
+
+/* Equalize icon size */
+.step-icon {
+    font-size: 3rem;
+}
+
+/* How We Work end */
+
+
+/*** Footer ***/
+.footer .btn.btn-social {
+    margin-right: 5px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light);
+    font-weight: normal;
+    border: 1px solid #FFFFFF;
+    border-radius: 35px;
+    transition: .3s;
+}
+
+.footer .btn.btn-social:hover {
+    color: var(--primary);
+}
+
+.footer .btn.btn-link {
+    display: block;
+    margin-bottom: 5px;
+    padding: 0;
+    text-align: left;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: normal;
+    text-transform: capitalize;
+    transition: .3s;
+}
+
+.footer .btn.btn-link::before {
+    position: relative;
+    content: "\f105";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 10px;
+    color: #fff;
+}
+
+.footer .btn.btn-link:hover {
+    letter-spacing: 1px;
+    box-shadow: none;
+}
+
+.footer .copyright {
+    padding: 25px 0;
+    font-size: 15px;
+    border-top: 1px solid rgba(256, 256, 256, .1);
+}
+
+.footer .copyright a {
+    color: var(--light);
+}
+
+.footer .footer-menu a {
+    margin-right: 15px;
+    padding-right: 15px;
+    border-right: 1px solid rgba(255, 255, 255, .1);
+}
+
+.footer .footer-menu a:last-child {
+    margin-right: 0;
+    padding-right: 0;
+    border-right: none;
+}
+
+/* footer end */
+
+
+/* Custom cursor start */
+.cursor {
+    position: fixed;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: rgba(255, 217, 0, 0.407);
+    pointer-events: none;
+    z-index: 9999;
+    transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 0 10px gold;
+    border: 2px solid #fff;
+}
+
+/* Custom cursor end */
+
+/* whatsapp start */
+.back-to-top {
+    margin: 65px 0;
+}
+
+.whatsapp-icon {
+    position: fixed;
+    bottom: 28px;
+    right: 30px;
+    background-color: #25d366;
+    color: white;
+    border-radius: 50%;
+    padding: 15px;
+    z-index: 1000;
+}
+
+.whatsapp-icon i {
+    font-size: 24px;
+}
+
+/* whatsapp end */
+
+
+/* Carousel start styling */
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.video-container video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.372);
+    z-index: 1;
+}
+
+/* Header styles */
+.scroll-header {
+    position: relative;
+    z-index: 10;
+    transition: position 0.3s ease, top 0.3s ease;
+}
+
+.scroll-header.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.782);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+    padding: 20px;
+    background-color: #f8f9fa;
+    min-height: 150vh;
+}
+
+/* Basic styles for video container and text */
+.video-text-overlay {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    /* color: white; */
+    z-index: 2;
+    /* text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); */
+    overflow: hidden;
+    width: 90%;
+}
+
+/* Keyframes for animation */
+/* @keyframes slideInPauseOut {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    30% {
+        transform: translateX(0);
+    }
+
+    70% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+} */
+
+/* Apply the animation */
+.slide-animation {
+    font-size: 3rem;
+    margin: 0;
+    color: #ffffff;
+    font-family: 'Times New Roman', Times, serif;
+    animation: slideInPauseOut 10s ease-in-out forwards;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.video-upper-text {
+    color: #ffffff;
+}
+
+.logo-company>img {
+    width: auto;
+    height: 80px;
+}
+
+/* Mobile responsive video container */
+@media (max-width: 768px) {
+    /* .video-container {
+        height: 350px;
+        overflow:unset;
+    } */
+
+    .video-container video {
+        height: 300px;
+        object-fit: cover;
+    }
+
+    .video-text-overlay {
+        top: 50%;
+        font-size: 1.5rem;
+    }
+
+    .slide-animation {
+        font-size: 1.5rem;
+    }
+
+    /* .video-text-overlay {
+        top: 80%;
+    } */
+
+    .navbar-collapse {
+        background: #302f29ab;
+        padding: 0 10px;
+    }
+
+    .video-upper-text {
+        display: none !important;
+    }
+
+    .logo-company>img {
+        height: 50px;
+    }
+    .before-after-container {  
+        max-height: 400px !important;
+    }
+}
+
+
+/* Carousel end styling */
+
+
+/* after and before start */
+.before-after-container {
+    position: relative;
+    width: 98%;
+    margin: auto;
+    max-height: 720px;
+    overflow: hidden;
+}
+
+.before-after-container img {
+    width: 100%;
+    display: block;
+    height: 720px;
+    background-size: cover;
+}
+
+.before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    clip-path: inset(0 50% 0 0);
+}
+
+.before img {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 5px;
+    height: 100%;
+    background: #fff;
+    cursor: ew-resize;
+    z-index: 2;
+}
+
+.slider-handle {
+    position: absolute;
+    top: 50%;
+    left: -18px;
+    width: 40px;
+    height: 60px;
+    border: 5px solid white;
+    border-radius: 50px;
+    transform: translateY(-50%);
+}
+
+.buttons-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.buttons-container button {
+    padding: 10px 20px;
+    margin: 0px 10px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttons-container button:hover {
+    background-color: #0056b3;
+}
+
+/* after and before end */
+.roundedCustom {
+    border-radius: 14px;
+}
+
+.serviceBox {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.hover-link:hover {
+    display: none;
+}
