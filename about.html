@@ -87,8 +87,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#pdfViewer"
-                            id="openPdf">Catalogue</a>
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#pdfModal">Catalogue</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html">Contact</a>
@@ -98,20 +97,25 @@
         </div>
     </nav>
 
-    <!-- PDF Viewer (Hidden by Default for iOS) -->
-    <script>
-       document.addEventListener("DOMContentLoaded", function () {
-            var pdfUrl = "img/Catalogue.pdf#toolbar=0&navpanes=0&scrollbar=0"; // Hides download & other buttons
+    <!-- PDF Modal -->
+    <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pdfModalLabel">Catalogue</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Embed PDF without download controls -->
+                    <iframe src="img/Catalogue.pdf#toolbar=0&navpanes=0&scrollbar=0" width="100%" height="550px"
+                        style="border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            // Handle PDF opening when the "Catalogue" link is clicked
-            document.getElementById("openPdf").addEventListener("click", function (event) {
-                event.preventDefault(); // Prevent default action
 
-                // Open PDF in a new tab without toolbar and download button
-                window.open(pdfUrl, "_blank");
-            });
-        });
-    </script>
+
     <!-- About Start -->
     <div class="container-xxl py-5">
         <div class="container">
