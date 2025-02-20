@@ -31,7 +31,7 @@
 @media (max-width: 576px) {
     .step-box {
         height: auto;
-    }
+    }   
 }
 
 /* Icon Styling */
@@ -297,6 +297,10 @@
     }
     .before-after-container {  
         max-height: 400px !important;
+    }
+
+    .footerText{
+        font-size: 8px !important;
     }
 }
 
