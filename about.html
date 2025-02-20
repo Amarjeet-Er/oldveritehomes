@@ -87,7 +87,8 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#pdfModal">Catalogue</a>
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#pdfViewer"
+                            id="openPdf">Catalogue</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html">Contact</a>
@@ -96,26 +97,26 @@
             </div>
         </div>
     </nav>
+    <div id="pdfContainer"></div>
 
-    <!-- PDF Modal -->
-    <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="pdfModalLabel">Catalogue</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Embed PDF without download controls -->
-                    <iframe src="img/Catalogue.pdf#toolbar=0&navpanes=0&scrollbar=0" width="100%" height="550px"
-                        style="border: none;"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- PDF Viewer (Hidden by Default for iOS) -->
+    <script>
+       document.addEventListener("DOMContentLoaded", function () {
+            var pdfUrl = "img/Catalogue.pdf#toolbar=0&navpanes=0&scrollbar=0"; // Hide toolbar
 
+            document.getElementById("openPdf").addEventListener("click", function (event) {
+                event.preventDefault(); // Prevent default action
 
-
+                // Check if PDF is already open; if so, do nothing
+                var pdfContainer = document.getElementById("pdfContainer");
+                if (!pdfContainer.innerHTML) {
+                    pdfContainer.innerHTML = '<object data="' + pdfUrl + '" type="application/pdf" width="100%" height="100vh" style="border: none;">' +
+                                             '<p>PDF cannot be displayed. <a href="' + pdfUrl + '" target="_blank">Click here to view</a>.</p>' +
+                                             '</object>';
+                }
+            });
+        });
+    </script>
     <!-- About Start -->
     <div class="container-xxl py-5">
         <div class="container">
