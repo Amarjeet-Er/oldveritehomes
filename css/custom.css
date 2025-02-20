@@ -131,6 +131,10 @@ canvas {
     max-width: 100%;
     height: auto;
 }
+#contectNumber{
+    color: #ffffff !important;
+    --color: #ffffff !important;
+}
 
 /* pdf viewer end */
 /* Custom cursor start */
