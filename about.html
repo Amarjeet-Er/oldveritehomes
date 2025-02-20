@@ -97,7 +97,6 @@
             </div>
         </div>
     </nav>
-    
     <!-- PDF Modal -->
     <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
@@ -107,17 +106,80 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <iframe id="pdfFrame" src="" width="100%" height="100%" style="border: none;"></iframe>
+                    <!-- Scrollable Container for PDF Pages -->
+                    <div id="pdfContainer" class="pdf-wrapper"></div>
                 </div>
             </div>
         </div>
     </div>
+    <style>
+        /* PDF container should be scrollable & responsive */
+        .pdf-wrapper {
+            max-height: 85vh;
+            /* 85% of screen height */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+        }
+
+        canvas {
+            max-width: 100%;
+            /* Responsive width */
+            height: auto;
+            /* Maintain aspect ratio */
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
     <script>
         document.getElementById("openPdfBtn").addEventListener("click", function () {
-            var pdfUrl = "https://oldveritehomes.vercel.app/img/Catalogue.pdf"; // Direct PDF URL
-            var embeddedUrl = "https://docs.google.com/gview?embedded=true&url=" + encodeURIComponent(pdfUrl);
-            document.getElementById("pdfFrame").src = embeddedUrl;
+            var url = "https://oldveritehomes.vercel.app/img/Catalogue.pdf";
+            var container = document.getElementById("pdfContainer");
+            container.innerHTML = ""; // Clear previous PDF content
+
+            pdfjsLib.getDocument(url).promise.then(function (pdf) {
+                console.log("PDF loaded, total pages:", pdf.numPages);
+
+                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                    pdf.getPage(pageNum).then(function (page) {
+                        var scale = 2; // High-resolution rendering
+                        var viewport = page.getViewport({ scale: scale });
+
+                        var canvas = document.createElement("canvas");
+                        canvas.classList.add("mb-3"); // Add margin between pages
+                        container.appendChild(canvas);
+
+                        var context = canvas.getContext("2d");
+
+                        // High-DPI Fix
+                        var outputScale = window.devicePixelRatio || 1;
+                        canvas.width = Math.floor(viewport.width * outputScale);
+                        canvas.height = Math.floor(viewport.height * outputScale);
+                        canvas.style.width = Math.floor(viewport.width) + "px";
+                        canvas.style.height = Math.floor(viewport.height) + "px";
+
+                        // ✅ Enable Text Smoothing
+                        context.scale(outputScale, outputScale);
+                        context.imageSmoothingEnabled = true; // Anti-aliasing fix
+                        context.imageSmoothingQuality = "high"; // Highest quality
+
+                        var renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+
+                        page.render(renderContext).promise.then(function () {
+                            console.log("Page " + pageNum + " rendered");
+                        });
+
+                    });
+                }
+            }).catch(function (error) {
+                console.error("Error loading PDF:", error);
+            });
         });
     </script>
 
