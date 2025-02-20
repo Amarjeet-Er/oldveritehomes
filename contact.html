@@ -97,9 +97,10 @@
             </div>
         </div>
     </nav>
-   
-     <!-- PDF Modal -->
-     <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+
+
+    <!-- PDF Modal -->
+    <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
@@ -121,68 +122,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.getElementById("openPdfBtn").addEventListener("click", function () {
-            var url = "https://oldveritehomes.vercel.app/img/Catalogue.pdf";
-            var container = document.getElementById("pdfContainer");
-            var loader = document.getElementById("pdfLoader");
-
-            container.innerHTML = ""; // Clear previous content
-            loader.style.display = "block"; // Show loader
-
-            pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
-
-            pdfjsLib.getDocument(url).promise.then(function (pdf) {
-                console.log("PDF loaded, total pages:", pdf.numPages);
-
-                function renderPage(pageNum) {
-                    pdf.getPage(pageNum).then(function (page) {
-                        var scale = 1.5;
-                        var viewport = page.getViewport({ scale: scale });
-
-                        var canvas = document.createElement("canvas");
-                        canvas.classList.add("mb-3");
-                        container.appendChild(canvas);
-
-                        var context = canvas.getContext("2d");
-
-                        var outputScale = window.devicePixelRatio || 1;
-                        canvas.width = Math.floor(viewport.width * outputScale);
-                        canvas.height = Math.floor(viewport.height * outputScale);
-                        canvas.style.width = Math.floor(viewport.width) + "px";
-                        canvas.style.height = Math.floor(viewport.height) + "px";
-
-                        context.scale(outputScale, outputScale);
-                        context.imageSmoothingEnabled = true;
-                        context.imageSmoothingQuality = "high";
-
-                        var renderContext = {
-                            canvasContext: context,
-                            viewport: viewport
-                        };
-
-                        page.render(renderContext).promise.then(function () {
-                            console.log("Page " + pageNum + " rendered");
-
-                            if (pageNum < pdf.numPages) {
-                                renderPage(pageNum + 1);
-                            } else {
-                                loader.style.display = "none"; // Hide loader after rendering all pages
-                            }
-                        });
-                    });
-                }
-
-                renderPage(1);
-
-            }).catch(function (error) {
-                console.error("Error loading PDF:", error);
-                loader.innerHTML = "<p class='text-danger'>Failed to load PDF.</p>"; // Show error message
-            });
-        });
-    </script>
-
 
     <!-- Contact Start -->
     <div class="container-xxl py-5">
