@@ -123,66 +123,81 @@
     </div>
 
     <script>
-        document.getElementById("openPdfBtn").addEventListener("click", function () {
-            var url = "https://oldveritehomes.vercel.app/img/Catalogue.pdf";
-            var container = document.getElementById("pdfContainer");
-            var loader = document.getElementById("pdfLoader");
+        document.addEventListener("DOMContentLoaded", function () {
+            var openPdfBtn = document.getElementById("openPdfBtn");
+            if (!openPdfBtn) {
+                console.error("Button not found");
+                return;
+            }
 
-            container.innerHTML = ""; // Clear previous content
-            loader.style.display = "block"; // Show loader
+            openPdfBtn.addEventListener("click", function () {
+                var url = "https://oldveritehomes.vercel.app/img/Catalogue.pdf";
+                var container = document.getElementById("pdfContainer");
+                var loader = document.getElementById("pdfLoader");
 
-            pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+                container.innerHTML = ""; // Clear previous content
+                loader.style.display = "block"; // Show loader
 
-            pdfjsLib.getDocument(url).promise.then(function (pdf) {
-                console.log("PDF loaded, total pages:", pdf.numPages);
+                // Use inline worker for iOS compatibility
+                var pdfjsWorkerSrc = URL.createObjectURL(new Blob([`
+                importScripts('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js');
+            `], { type: "application/javascript" }));
 
-                function renderPage(pageNum) {
-                    pdf.getPage(pageNum).then(function (page) {
-                        var scale = 1.5;
-                        var viewport = page.getViewport({ scale: scale });
+                pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerSrc;
 
-                        var canvas = document.createElement("canvas");
-                        canvas.classList.add("mb-3");
-                        container.appendChild(canvas);
+                pdfjsLib.getDocument(url).promise.then(function (pdf) {
+                    console.log("PDF loaded, total pages:", pdf.numPages);
 
-                        var context = canvas.getContext("2d");
+                    function renderPage(pageNum) {
+                        pdf.getPage(pageNum).then(function (page) {
+                            var scale = window.innerWidth > 768 ? 1.5 : 1.2; // Reduce scale for iOS memory limits
+                            var viewport = page.getViewport({ scale: scale });
 
-                        var outputScale = window.devicePixelRatio || 1;
-                        canvas.width = Math.floor(viewport.width * outputScale);
-                        canvas.height = Math.floor(viewport.height * outputScale);
-                        canvas.style.width = Math.floor(viewport.width) + "px";
-                        canvas.style.height = Math.floor(viewport.height) + "px";
+                            var canvas = document.createElement("canvas");
+                            canvas.classList.add("mb-3");
+                            container.appendChild(canvas);
 
-                        context.scale(outputScale, outputScale);
-                        context.imageSmoothingEnabled = true;
-                        context.imageSmoothingQuality = "high";
+                            var context = canvas.getContext("2d");
 
-                        var renderContext = {
-                            canvasContext: context,
-                            viewport: viewport
-                        };
+                            var outputScale = window.devicePixelRatio || 1;
+                            canvas.width = Math.floor(viewport.width * outputScale);
+                            canvas.height = Math.floor(viewport.height * outputScale);
+                            canvas.style.width = Math.floor(viewport.width) + "px";
+                            canvas.style.height = Math.floor(viewport.height) + "px";
 
-                        page.render(renderContext).promise.then(function () {
-                            console.log("Page " + pageNum + " rendered");
+                            context.scale(outputScale, outputScale);
+                            context.imageSmoothingEnabled = true;
+                            context.imageSmoothingQuality = "high";
 
-                            if (pageNum < pdf.numPages) {
-                                renderPage(pageNum + 1);
-                            } else {
-                                loader.style.display = "none"; // Hide loader after rendering all pages
-                            }
+                            var renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
+
+                            page.render(renderContext).promise.then(function () {
+                                console.log("Page " + pageNum + " rendered");
+
+                                if (pageNum < pdf.numPages) {
+                                    renderPage(pageNum + 1);
+                                } else {
+                                    loader.style.display = "none"; // Hide loader after rendering all pages
+                                }
+                            }).catch(function (err) {
+                                console.error("Rendering error:", err);
+                                loader.innerHTML = "<p class='text-danger'>Error rendering page.</p>";
+                            });
                         });
-                    });
-                }
+                    }
 
-                renderPage(1);
+                    renderPage(1);
 
-            }).catch(function (error) {
-                console.error("Error loading PDF:", error);
-                loader.innerHTML = "<p class='text-danger'>Failed to load PDF.</p>"; // Show error message
+                }).catch(function (error) {
+                    console.error("Error loading PDF:", error);
+                    loader.innerHTML = "<p class='text-danger'>Failed to load PDF.</p>";
+                });
             });
         });
     </script>
-
 
     <!-- About Start -->
     <div class="container-xxl py-5">
@@ -305,7 +320,8 @@
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
                     <h1 class="display-5 mb-4">You’re your own designer and we’re just implementors!</h1>
                     <p class="mb-4">
-                        At Verite, we understand that exceptional design is only as good as its execution. That is why we don't just create beautiful concepts—we bring them to life. Here's why you should choose us.
+                        At Verite, we understand that exceptional design is only as good as its execution. That is why
+                        we don't just create beautiful concepts—we bring them to life. Here's why you should choose us.
                     </p>
                     <div class="row g-4">
                         <div class="col-12">
@@ -314,7 +330,8 @@
                                 <div class="ms-4">
                                     <h3>Quality</h3>
                                     <p class="mb-0">
-                                        Quality is the foundation of our reputation, and we stand behind every project we complete.
+                                        Quality is the foundation of our reputation, and we stand behind every project
+                                        we complete.
                                     </p>
                                 </div>
                             </div>
@@ -325,7 +342,8 @@
                                 <div class="ms-4">
                                     <h3>Integrity</h3>
                                     <p class="mb-0">
-                                        Integrity isn't just a one-time commitment, it’s a core value that guides everything we do.
+                                        Integrity isn't just a one-time commitment, it’s a core value that guides
+                                        everything we do.
                                     </p>
                                 </div>
                             </div>
@@ -392,7 +410,7 @@
                     </p>
                 </div>
 
-                 <div class="d-flex align-items-baseline">
+                <div class="d-flex align-items-baseline">
                     <i class="fa fa-phone-alt me-3"></i>
                     <p class=" mb-2 display-8"
                         style="color: white !important; text-decoration: none; -webkit-text-fill-color: white !important;">
