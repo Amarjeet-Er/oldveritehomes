@@ -97,7 +97,6 @@
             </div>
         </div>
     </nav>
-    <!-- Include PDF.js -->
 
     <!-- PDF Modal -->
     <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
@@ -108,6 +107,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- Loader -->
+                    <div id="pdfLoader" class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading PDF...</span>
+                        </div>
+                        <p>Loading PDF...</p>
+                    </div>
+
+                    <!-- PDF Container -->
                     <div id="pdfContainer" class="pdf-wrapper"></div>
                 </div>
             </div>
@@ -118,7 +126,10 @@
         document.getElementById("openPdfBtn").addEventListener("click", function () {
             var url = "https://oldveritehomes.vercel.app/img/Catalogue.pdf";
             var container = document.getElementById("pdfContainer");
+            var loader = document.getElementById("pdfLoader");
+
             container.innerHTML = ""; // Clear previous content
+            loader.style.display = "block"; // Show loader
 
             pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
 
@@ -127,23 +138,21 @@
 
                 function renderPage(pageNum) {
                     pdf.getPage(pageNum).then(function (page) {
-                        var scale = 1.5; // Adjust scale for readability
+                        var scale = 1.5;
                         var viewport = page.getViewport({ scale: scale });
 
                         var canvas = document.createElement("canvas");
-                        canvas.classList.add("mb-3"); // Add margin between pages
+                        canvas.classList.add("mb-3");
                         container.appendChild(canvas);
 
                         var context = canvas.getContext("2d");
 
-                        // High-DPI Fix
                         var outputScale = window.devicePixelRatio || 1;
                         canvas.width = Math.floor(viewport.width * outputScale);
                         canvas.height = Math.floor(viewport.height * outputScale);
                         canvas.style.width = Math.floor(viewport.width) + "px";
                         canvas.style.height = Math.floor(viewport.height) + "px";
 
-                        // ✅ Enable Text Smoothing
                         context.scale(outputScale, outputScale);
                         context.imageSmoothingEnabled = true;
                         context.imageSmoothingQuality = "high";
@@ -155,20 +164,25 @@
 
                         page.render(renderContext).promise.then(function () {
                             console.log("Page " + pageNum + " rendered");
+
                             if (pageNum < pdf.numPages) {
-                                renderPage(pageNum + 1); // Load next page
+                                renderPage(pageNum + 1);
+                            } else {
+                                loader.style.display = "none"; // Hide loader after rendering all pages
                             }
                         });
                     });
                 }
 
-                renderPage(1); // Start rendering from first page
+                renderPage(1);
 
             }).catch(function (error) {
                 console.error("Error loading PDF:", error);
+                loader.innerHTML = "<p class='text-danger'>Failed to load PDF.</p>"; // Show error message
             });
         });
     </script>
+
 
     <!-- 404 Start -->
     <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
@@ -187,7 +201,7 @@
     </div>
     <!-- 404 End -->
 
-  
+
 
 
     <!-- Footer Start -->
