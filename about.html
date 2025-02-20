@@ -97,6 +97,8 @@
             </div>
         </div>
     </nav>
+    <!-- Include PDF.js -->
+
     <!-- PDF Modal -->
     <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
@@ -106,46 +108,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Scrollable Container for PDF Pages -->
                     <div id="pdfContainer" class="pdf-wrapper"></div>
                 </div>
             </div>
         </div>
     </div>
-    <style>
-        /* PDF container should be scrollable & responsive */
-        .pdf-wrapper {
-            max-height: 85vh;
-            /* 85% of screen height */
-            overflow-y: auto;
-            /* Enable vertical scrolling */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 10px;
-        }
-
-        canvas {
-            max-width: 100%;
-            /* Responsive width */
-            height: auto;
-            /* Maintain aspect ratio */
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
     <script>
         document.getElementById("openPdfBtn").addEventListener("click", function () {
             var url = "https://oldveritehomes.vercel.app/img/Catalogue.pdf";
             var container = document.getElementById("pdfContainer");
-            container.innerHTML = ""; // Clear previous PDF content
+            container.innerHTML = ""; // Clear previous content
+
+            pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
 
             pdfjsLib.getDocument(url).promise.then(function (pdf) {
                 console.log("PDF loaded, total pages:", pdf.numPages);
 
-                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                function renderPage(pageNum) {
                     pdf.getPage(pageNum).then(function (page) {
-                        var scale = 2; // High-resolution rendering
+                        var scale = 1.5; // Adjust scale for readability
                         var viewport = page.getViewport({ scale: scale });
 
                         var canvas = document.createElement("canvas");
@@ -163,8 +145,8 @@
 
                         // ✅ Enable Text Smoothing
                         context.scale(outputScale, outputScale);
-                        context.imageSmoothingEnabled = true; // Anti-aliasing fix
-                        context.imageSmoothingQuality = "high"; // Highest quality
+                        context.imageSmoothingEnabled = true;
+                        context.imageSmoothingQuality = "high";
 
                         var renderContext = {
                             canvasContext: context,
@@ -173,10 +155,15 @@
 
                         page.render(renderContext).promise.then(function () {
                             console.log("Page " + pageNum + " rendered");
+                            if (pageNum < pdf.numPages) {
+                                renderPage(pageNum + 1); // Load next page
+                            }
                         });
-
                     });
                 }
+
+                renderPage(1); // Start rendering from first page
+
             }).catch(function (error) {
                 console.error("Error loading PDF:", error);
             });
@@ -474,6 +461,7 @@
     <script src="lib/tempusdominus/js/moment.min.js"></script>
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
 
     <!-- MagicCursor js file -->

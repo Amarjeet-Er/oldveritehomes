@@ -31,7 +31,7 @@
 @media (max-width: 576px) {
     .step-box {
         height: auto;
-    }   
+    }
 }
 
 /* Icon Styling */
@@ -117,7 +117,22 @@
 
 /* footer end */
 
+/* pdf viewer start */
+.pdf-wrapper {
+    max-height: 85vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
 
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* pdf viewer end */
 /* Custom cursor start */
 .cursor {
     position: fixed;
@@ -295,11 +310,12 @@
     .logo-company>img {
         height: 50px;
     }
-    .before-after-container {  
+
+    .before-after-container {
         max-height: 400px !important;
     }
 
-    .footerText{
+    .footerText {
         font-size: 8px !important;
     }
 }

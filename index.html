@@ -87,7 +87,8 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#pdfModal">Catalogue</a>
+                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#pdfModal"
+                                id="openPdfBtn">Catalogue</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="contact.html">Contact</a>
@@ -96,7 +97,8 @@
                 </div>
             </div>
         </nav>
-
+        <!-- Include PDF.js -->
+    
         <!-- PDF Modal -->
         <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-fullscreen">
@@ -106,14 +108,67 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Embed PDF without download controls -->
-                        <iframe src="img/Catalogue.pdf#toolbar=0&navpanes=0&scrollbar=0" width="100%" height="550px"
-                            style="border: none;">
-                        </iframe>
+                        <div id="pdfContainer" class="pdf-wrapper"></div>
                     </div>
                 </div>
             </div>
         </div>
+    
+        <script>
+            document.getElementById("openPdfBtn").addEventListener("click", function () {
+                var url = "https://oldveritehomes.vercel.app/img/Catalogue.pdf";
+                var container = document.getElementById("pdfContainer");
+                container.innerHTML = ""; // Clear previous content
+    
+                pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+    
+                pdfjsLib.getDocument(url).promise.then(function (pdf) {
+                    console.log("PDF loaded, total pages:", pdf.numPages);
+    
+                    function renderPage(pageNum) {
+                        pdf.getPage(pageNum).then(function (page) {
+                            var scale = 1.5; // Adjust scale for readability
+                            var viewport = page.getViewport({ scale: scale });
+    
+                            var canvas = document.createElement("canvas");
+                            canvas.classList.add("mb-3"); // Add margin between pages
+                            container.appendChild(canvas);
+    
+                            var context = canvas.getContext("2d");
+    
+                            // High-DPI Fix
+                            var outputScale = window.devicePixelRatio || 1;
+                            canvas.width = Math.floor(viewport.width * outputScale);
+                            canvas.height = Math.floor(viewport.height * outputScale);
+                            canvas.style.width = Math.floor(viewport.width) + "px";
+                            canvas.style.height = Math.floor(viewport.height) + "px";
+    
+                            // ✅ Enable Text Smoothing
+                            context.scale(outputScale, outputScale);
+                            context.imageSmoothingEnabled = true;
+                            context.imageSmoothingQuality = "high";
+    
+                            var renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
+    
+                            page.render(renderContext).promise.then(function () {
+                                console.log("Page " + pageNum + " rendered");
+                                if (pageNum < pdf.numPages) {
+                                    renderPage(pageNum + 1); // Load next page
+                                }
+                            });
+                        });
+                    }
+    
+                    renderPage(1); // Start rendering from first page
+    
+                }).catch(function (error) {
+                    console.error("Error loading PDF:", error);
+                });
+            });
+        </script>
 
         <!-- Dynamic Text Overlay -->
         <div class="video-text-overlay">
@@ -756,6 +811,7 @@
     <script src="lib/tempusdominus/js/moment.min.js"></script>
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
 
     <!-- MagicCursor js file -->
