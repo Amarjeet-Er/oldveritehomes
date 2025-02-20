@@ -87,7 +87,8 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#pdfModal">Catalogue</a>
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#pdfModal"
+                            id="openPdfBtn">Catalogue</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html">Contact</a>
@@ -96,6 +97,9 @@
             </div>
         </div>
     </nav>
+
+    <!-- Bootstrap CSS (Include in <head>) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- PDF Modal -->
     <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
@@ -106,16 +110,23 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Embed PDF without download controls -->
-                    <!-- <iframe src="img/Catalogue.pdf#toolbar=0&navpanes=0&scrollbar=0" width="100%" height="550px"
-                        style="border: none;"></iframe> -->
-                    <iframe
-                        src="https://docs.google.com/gview?embedded=true&url=https://oldveritehomes.vercel.app/img/Catalogue.pdf"
-                        width="100%" height="550px" style="border: none;"></iframe>
+                    <iframe id="pdfFrame" src="" width="100%" height="550px" style="border: none;"></iframe>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <!-- Bootstrap JS (Include before </body>) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById("openPdfBtn").addEventListener("click", function () {
+            var pdfUrl = "https://oldveritehomes.vercel.app/img/Catalogue.pdf"; // Direct PDF URL
+            document.getElementById("pdfFrame").src = pdfUrl;
+        });
+    </script>
+
 
 
 
